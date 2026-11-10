@@ -19,6 +19,17 @@ jobs:
           curl -fL -o dist.zip 'https://customer-assets-cm19k8pv.emergentagent.net/wingman/b232f17c-832c-4805-96ff-5264e0980fda/attachments/3d1156013733492d85cb907218181ae7_mosul-insta-web-dist-v2.zip'
           mkdir dist && unzip -q dist.zip -d dist
           touch dist/.nojekyll
+      - name: Persist login session
+        run: |
+          python3 - <<'PYEOF'
+          import glob
+          f = glob.glob('dist/_expo/static/js/web/index-*.js')[0]
+          s = open(f, encoding='utf8').read()
+          old = "[u,l]=(0,t.useState)(null)"
+          new = "[u,l0]=(0,t.useState)(()=>{try{return JSON.parse(localStorage.getItem('mi_user'))}catch(e){return null}}),l=v=>l0(p=>{const n=typeof v==='function'?v(p):v;try{n?localStorage.setItem('mi_user',JSON.stringify(n)):localStorage.removeItem('mi_user')}catch(e){}return n})"
+          assert s.count(old) == 1
+          open(f, 'w', encoding='utf8').write(s.replace(old, new))
+          PYEOF
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
