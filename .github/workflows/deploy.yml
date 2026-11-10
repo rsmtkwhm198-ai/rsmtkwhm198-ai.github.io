@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Download build
         run: |
-          curl -fL -o dist.zip 'https://customer-assets-cm19k8pv.emergentagent.net/wingman/b232f17c-832c-4805-96ff-5264e0980fda/attachments/23967da3f39a4251949a5312002ef680_mosul-insta-web-dist.zip'
-          unzip -q dist.zip
+          curl -fL -o dist.zip 'https://customer-assets-cm19k8pv.emergentagent.net/wingman/b232f17c-832c-4805-96ff-5264e0980fda/attachments/3d1156013733492d85cb907218181ae7_mosul-insta-web-dist-v2.zip'
+          mkdir dist && unzip -q dist.zip -d dist
           touch dist/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
