@@ -1,0 +1,27 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Download build
+        run: |
+          curl -fL -o dist.zip 'https://customer-assets-cm19k8pv.emergentagent.net/wingman/b232f17c-832c-4805-96ff-5264e0980fda/attachments/23967da3f39a4251949a5312002ef680_mosul-insta-web-dist.zip'
+          unzip -q dist.zip
+          touch dist/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
